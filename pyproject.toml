@@ -6,7 +6,7 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "naja_atra_wsgi"
+name = "naja-atra-wsgi"
 description = "This is a simple http server, use MVC like design."
 readme = "README.md"
 authors = [
@@ -21,7 +21,7 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "naja_atra>=1.0.0"
+    "naja-atra"
 ]
 dynamic = ["version"]
 
@@ -32,7 +32,7 @@ test = ["pytest"]
 include=["naja_atra_wsgi*"]
 
 [tool.setuptools.dynamic]
-version = {attr = "naja_atra.version"}
+version = {attr = "naja_atra_wsgi.version"}
 
 [project.urls]
 homepage = "https://github.com/naja-atra/naja-atra-wsgi"

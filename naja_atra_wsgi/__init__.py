@@ -10,6 +10,7 @@ from naja_atra.http_servers.routing_server import RoutingServer
 from naja_atra.request_handlers.http_session_local_impl import LocalSessionFactory
 from .wsgi_request_handler import WSGIRequestHandler
 
+version = "1.0.0"
 
 class WSGIProxy(RoutingServer):
 
