@@ -12,7 +12,7 @@ import http.client
 
 from wsgiref.simple_server import WSGIServer, make_server
 from naja_atra.utils.logger import get_logger, set_level
-from naja_atra_wsgi import wsgi_proxy
+from naja_atra_wsgi import new_wsgi_proxy
 import naja_atra.server as server
 
 
@@ -37,7 +37,7 @@ class WSGIHttpRequestTest(unittest.TestCase):
         root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         server.scan(project_dir=root, base_dir="tests/ctrls",
                     regx=r'.*controllers.*')
-        proxy = wsgi_proxy(
+        proxy = new_wsgi_proxy(
             resources={"/public/*": f"{root}/tests/static"})
 
         def wsgi_simple_app(environment, start_response):

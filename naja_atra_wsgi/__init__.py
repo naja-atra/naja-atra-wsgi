@@ -10,7 +10,9 @@ from naja_atra.http_servers.routing_server import RoutingServer
 from naja_atra.request_handlers.http_session_local_impl import LocalSessionFactory
 from .wsgi_request_handler import WSGIRequestHandler
 
+
 version = "1.0.0"
+
 
 class WSGIProxy(RoutingServer):
 
@@ -49,9 +51,23 @@ def __fill_proxy(proxy: RoutingServer, session_factory: SessionFactory, app_conf
         proxy.map_error_page(code, func)
 
 
-def wsgi_proxy(resources: Dict[str, str] = {}, session_factory: SessionFactory = None, app_conf: AppConf = None) -> WSGIProxy:
+def new_wsgi_proxy(resources: Dict[str, str] = {}, session_factory: SessionFactory = None, app_conf: AppConf = None) -> WSGIProxy:
     appconf = app_conf or get_app_conf()
     proxy = WSGIProxy(res_conf=resources,
                       model_binding_conf=appconf.model_binding_conf)
     __fill_proxy(proxy, session_factory, appconf)
     return proxy
+
+
+_proxy: WSGIProxy = None
+
+
+def init(resources: Dict[str, str] = {}, session_factory: SessionFactory = None, app_conf: AppConf = None):
+    global _proxy
+    _proxy = new_wsgi_proxy(resources, session_factory, app_conf)
+
+
+def app(environment, start_response):
+    if _proxy is None:
+        init()
+    _proxy.app_proxy(environment, start_response)

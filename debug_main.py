@@ -2,7 +2,7 @@
 #
 
 
-from naja_atra import request_map
+from naja_atra import route
 from wsgiref.simple_server import WSGIServer, make_server
 import naja_atra.server as server
 import os
@@ -12,7 +12,7 @@ import signal
 from threading import Thread
 
 from naja_atra.utils.logger import get_logger, set_level
-import naja_atra_wsgi
+from naja_atra_wsgi import init, app
 
 
 set_level("DEBUG")
@@ -24,7 +24,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 wsgi_server: WSGIServer = None
 
 
-@request_map("/stop")
+@route("/stop")
 def stop():
     global wsgi_server
     wsgi_server.shutdown()
@@ -35,12 +35,11 @@ def stop():
 def start_server_wsgi():
     _logger.info("start server in background. ")
     server.scan(base_dir="tests/ctrls", regx=r'.*controllers.*')
-    wsgi_proxy = naja_atra_wsgi.wsgi_proxy(
-        resources={"/public/*": f"{PROJECT_ROOT}/tests/static",
-                   "/*": f"{PROJECT_ROOT}/tests/static"})
+    init(resources={"/public/*": f"{PROJECT_ROOT}/tests/static",
+                    "/*": f"{PROJECT_ROOT}/tests/static"})
 
     global wsgi_server
-    wsgi_server = make_server("", 9090, wsgi_proxy.app_proxy)
+    wsgi_server = make_server("", 9090, app)
     wsgi_server.serve_forever()
 
 
