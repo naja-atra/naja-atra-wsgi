@@ -12,7 +12,7 @@ import signal
 from threading import Thread
 
 from naja_atra.utils.logger import get_logger, set_level
-from naja_atra_wsgi import init, app
+from naja_atra_wsgi import config, app
 
 
 set_level("DEBUG")
@@ -35,7 +35,7 @@ def stop():
 def start_server_wsgi():
     _logger.info("start server in background. ")
     server.scan(base_dir="tests/ctrls", regx=r'.*controllers.*')
-    init(resources={"/public/*": f"{PROJECT_ROOT}/tests/static",
+    config(resources={"/public/*": f"{PROJECT_ROOT}/tests/static",
                     "/*": f"{PROJECT_ROOT}/tests/static"})
 
     global wsgi_server

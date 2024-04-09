@@ -19,21 +19,21 @@ if __name__ == '__main__':
 
 ```
 
-You can use `server.scan()` to import routes from other modules. And also you can use `naja_atra_wsgi.init()` to function to sepecify the static resources routes.
+You can use `server.scan()` to import routes from other modules. And also you can use `naja_atra_wsgi.config()` to function to sepecify the static resources routes.
 
 ```python
 import os
 import naja_atra.server as server
 
 from wsgiref.simple_server import make_server
-from naja_atra_wsgi import init, app
+from naja_atra_wsgi import config, app
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 if __name__ == '__main__':
     
     server.scan(base_dir="tests/ctrls", regx=r'.*controllers.*')
-    init(resources={"/public/*": f"{PROJECT_ROOT}/tests/static",
+    config(resources={"/public/*": f"{PROJECT_ROOT}/tests/static",
                     "/*": f"{PROJECT_ROOT}/tests/static"})
 
     wsgi_server = make_server("", 9090, app)

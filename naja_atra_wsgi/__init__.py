@@ -62,12 +62,12 @@ def new_wsgi_proxy(resources: Dict[str, str] = {}, session_factory: SessionFacto
 _proxy: WSGIProxy = None
 
 
-def init(resources: Dict[str, str] = {}, session_factory: SessionFactory = None, app_conf: AppConf = None):
+def config(resources: Dict[str, str] = {}, session_factory: SessionFactory = None, app_conf: AppConf = None):
     global _proxy
     _proxy = new_wsgi_proxy(resources, session_factory, app_conf)
 
 
 def app(environment, start_response):
     if _proxy is None:
-        init()
+        config()
     _proxy.app_proxy(environment, start_response)
