@@ -28,7 +28,7 @@ import html
 from typing import Any, Dict, List
 from http import HTTPStatus
 
-from naja_atra.request_handlers.http_request_handler import HTTPRequestHandler
+from naja_atra.request_handlers.http_request_handler import HttpRequestHandler
 from naja_atra.utils import http_utils
 from naja_atra.utils.logger import get_logger
 
@@ -113,7 +113,7 @@ class WSGIRequestHandler:
             self.send_error(501)
             self.start_response(self.status, self.response_headers)
         else:
-            handler = HTTPRequestHandler(self, environment=self.env)
+            handler = HttpRequestHandler(self, environment=self.env)
             await handler.handle_request()
             self.start_response(self.status, self.response_headers)
         return self.body

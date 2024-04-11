@@ -3,15 +3,15 @@
 from typing import Dict
 import asyncio
 
-from naja_atra import SessionFactory, AppConf
+from naja_atra import HttpSessionFactory, AppConf
 from naja_atra import get_app_conf, set_session_factory
-from naja_atra.models.model_bindings import ModelBindingConf
+from naja_atra import ModelBindingConf
 from naja_atra.http_servers.routing_server import RoutingServer
 from naja_atra.request_handlers.http_session_local_impl import LocalSessionFactory
 from .wsgi_request_handler import WSGIRequestHandler
 
 
-version = "1.0.0"
+version = "1.0.1"
 
 
 class WSGIProxy(RoutingServer):
@@ -27,7 +27,7 @@ class WSGIProxy(RoutingServer):
         return await request_handler.handle_request()
 
 
-def __fill_proxy(proxy: RoutingServer, session_factory: SessionFactory, app_conf: AppConf):
+def __fill_proxy(proxy: RoutingServer, session_factory: HttpSessionFactory, app_conf: AppConf):
     appconf = app_conf or get_app_conf()
     set_session_factory(
         session_factory or appconf.session_factory or LocalSessionFactory())
@@ -51,7 +51,7 @@ def __fill_proxy(proxy: RoutingServer, session_factory: SessionFactory, app_conf
         proxy.map_error_page(code, func)
 
 
-def new_wsgi_proxy(resources: Dict[str, str] = {}, session_factory: SessionFactory = None, app_conf: AppConf = None) -> WSGIProxy:
+def new_wsgi_proxy(resources: Dict[str, str] = {}, session_factory: HttpSessionFactory = None, app_conf: AppConf = None) -> WSGIProxy:
     appconf = app_conf or get_app_conf()
     proxy = WSGIProxy(res_conf=resources,
                       model_binding_conf=appconf.model_binding_conf)
@@ -62,7 +62,7 @@ def new_wsgi_proxy(resources: Dict[str, str] = {}, session_factory: SessionFacto
 _proxy: WSGIProxy = None
 
 
-def config(resources: Dict[str, str] = {}, session_factory: SessionFactory = None, app_conf: AppConf = None):
+def config(resources: Dict[str, str] = {}, session_factory: HttpSessionFactory = None, app_conf: AppConf = None):
     global _proxy
     _proxy = new_wsgi_proxy(resources, session_factory, app_conf)
 
