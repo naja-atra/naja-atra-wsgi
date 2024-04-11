@@ -11,7 +11,7 @@ from naja_atra.request_handlers.http_session_local_impl import LocalSessionFacto
 from .wsgi_request_handler import WSGIRequestHandler
 
 
-version = "1.0.1"
+version = "1.0.2"
 
 
 class WSGIProxy(RoutingServer):
@@ -70,4 +70,4 @@ def config(resources: Dict[str, str] = {}, session_factory: HttpSessionFactory =
 def app(environment, start_response):
     if _proxy is None:
         config()
-    _proxy.app_proxy(environment, start_response)
+    return _proxy.app_proxy(environment, start_response)
